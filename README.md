@@ -58,16 +58,9 @@ This is a Node.js backend API for managing EV charging stations and user authent
 
    Create a `.env` file in the root directory:
 
-   ```
+   ```.env
    JWT_SECRET=your_jwt_secret
    DB_URI=your_mongodb_connection_string
-   ```
-
-   Example:
-
-   ```
-   JWT_SECRET=sachin
-   DB_URI=mongodb+srv://username:password@cluster.mongodb.net/charging?retryWrites=true&w=majority
    ```
 
 4. **Start the server**
