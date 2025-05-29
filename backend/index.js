@@ -49,3 +49,6 @@ app.use((req, res) => {
 //     connectDB(); // Function to connect to MongoDB
 //     console.log('Server is running on http://localhost:3000');
 // });
+
+// ...existing code...
+module.exports = app;
