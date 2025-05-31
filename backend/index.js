@@ -27,6 +27,9 @@ app.use('/api', registerRoute);
 
 // Use routes
 app.use(authenticate); // Apply authentication middleware globally
+app.use('/check',authenticate, (req, res) => {
+    res.json({ message: 'Server is running and authenticated', ok: true, user: { id: req.user._id, email: req.user.email, role: req.user.role, username: req.user.username } });
+});
 app.use('/api', addRoute);
 app.use('/api', updateRoute);
 app.use('/api', readRoute);
@@ -42,8 +45,6 @@ app.use((err, req, res, next) => {
 app.use((req, res) => {
     res.status(404).json({ message: 'Not Found' });
 });
-
-connectDB(); // Function to connect to MongoDB
 // Connect to MongoDB (assuming mongoose is used)
 
 // Start the server

@@ -30,7 +30,7 @@ router.get('/charging-stations', async (req, res) => {
             filter.city = { $regex: city, $options: 'i' };
         }
         if (poweroutput) {
-            filter.poweroutput = poweroutput;
+            filter.poweroutput = { $gte: Number(poweroutput) };
         }
         if (connectorType) {
             filter.connectorType = { $regex: connectorType, $options: 'i' };
