@@ -42,6 +42,8 @@ app.use((err, req, res, next) => {
 app.use((req, res) => {
     res.status(404).json({ message: 'Not Found' });
 });
+
+connectDB(); // Function to connect to MongoDB
 // Connect to MongoDB (assuming mongoose is used)
 
 // Start the server
