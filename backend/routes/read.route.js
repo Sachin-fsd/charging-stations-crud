@@ -25,6 +25,32 @@ router.get('/charging-stations/:id', async (req, res) => {
     }
 });
 
+// Get charging stations by city
+router.get('/charging-stations/city/:city', async (req, res) => {
+    try {
+        const stations = await ChargingStation.find({ city: req.params.city });
+        if (stations.length === 0) {
+            return res.status(404).json({ message: 'No charging stations found in this city' });
+        }
+        res.json(stations);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching charging stations by city' });
+    }
+});
+
+// Get charging stations by state
+router.get('/charging-stations/state/:state', async (req, res) => {
+    try {
+        const stations = await ChargingStation.find({ state: req.params.state });
+        if (stations.length === 0) {
+            return res.status(404).json({ message: 'No charging stations found in this state' });
+        }
+        res.json(stations);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching charging stations by state' });
+    }
+});
+
 
 // export the router
 module.exports = router;

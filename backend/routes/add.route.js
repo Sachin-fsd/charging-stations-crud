@@ -7,7 +7,6 @@ const ChargingStation = require('../models/chargingStation.model');
 // Add a new charging station
 router.post('/charging-stations', authenticate, authorize('admin'), async (req, res) => {
     try {
-        
         const newStation = new ChargingStation(req.body);
         await newStation.save();
         res.status(201).json(newStation);
