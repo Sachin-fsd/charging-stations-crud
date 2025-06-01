@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const ChargingStation = require('../models/chargingStation.model');
 
-// Flexible filter: GET /api/charging-stations?name=...&state=...&city=...&id=...&poweroutput=...&connectorType=...&status=...
+// Flexible filter: GET /api/charging-stations?name=...&state=...&city=...&id=...&powerOutput=...&connectorType=...&status=...
 router.get('/charging-stations', async (req, res) => {
     try {
         const {
@@ -10,7 +10,7 @@ router.get('/charging-stations', async (req, res) => {
             state,
             city,
             id,
-            poweroutput,
+            powerOutput,
             connectorType,
             status
         } = req.query;
@@ -29,8 +29,8 @@ router.get('/charging-stations', async (req, res) => {
         if (city) {
             filter.city = { $regex: city, $options: 'i' };
         }
-        if (poweroutput) {
-            filter.poweroutput = { $gte: Number(poweroutput) };
+        if (powerOutput) {
+            filter.powerOutput = { $gte: Number(powerOutput) };
         }
         if (connectorType) {
             filter.connectorType = { $regex: connectorType, $options: 'i' };
