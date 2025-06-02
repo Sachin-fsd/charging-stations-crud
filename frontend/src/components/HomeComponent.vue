@@ -19,6 +19,10 @@
                             <v-card-title class="pb-0 pl-4">
                                 <span class="text-h6 font-weight-bold">Search Stations</span>
                             </v-card-title>
+
+                            <v-overlay :model-value="isLoading" contained class="d-flex align-center justify-center">
+                                <LottieLoader />
+                            </v-overlay>
                             <v-card-text>
                                 <v-text-field v-model="name" label="Name" dense variant="outlined" class="mb-2" />
                                 <v-text-field v-model="state" label="State" dense variant="outlined" class="mb-2" />
@@ -40,7 +44,16 @@
                                     { title: 'Inactive', value: 'Inactive' },
                                     { title: 'Maintenance', value: 'Maintenance' },
                                 ]" label="Status" dense variant="outlined" class="mb-2" />
-                                <v-btn color="primary" block @click="searchStations" class="mb-2">Search</v-btn>
+
+                                <v-btn @click="searchStations"  type="submit" color="primary" block size="large" class="mb-3"
+                                    :loading="isLoading" :disabled="isLoading">
+                                    <template #default>
+                                        <!-- <v-icon v-if="!isLoading" left>mdi-check-circle</v-icon> -->
+                                        <span v-if="isLoading">Searching</span>
+                                        <span v-else>Search</span>
+                                    </template>
+                                </v-btn>
+
                                 <v-btn color="secondary" block @click="clearSelection" class="mb-2">Reset</v-btn>
                                 <v-alert v-if="createError" type="error" dense>{{ createError }}</v-alert>
                             </v-card-text>
@@ -77,11 +90,11 @@
                                     <div class="station-detail"><strong>Status:</strong> {{ selectedStation.status }}
                                     </div>
                                     <div class="station-detail"><strong>Power:</strong> {{ selectedStation.powerOutput
-                                        }} kW</div>
+                                    }} kW</div>
                                     <div class="station-detail"><strong>Connector:</strong> {{
                                         selectedStation.connectorType }}</div>
                                     <div class="station-detail"><strong>Lat/Lng:</strong> {{ selectedStation.latitude
-                                        }}, {{ selectedStation.longitude }}</div>
+                                    }}, {{ selectedStation.longitude }}</div>
                                     <v-row dense align="center" class="mb-2" v-if="userRole === 'admin'">
                                         <v-col cols="auto">
                                             <v-btn icon color="warning"
@@ -129,7 +142,7 @@
                                         <v-btn color="error" @click="closeCreateSidebar">Cancel</v-btn>
                                     </v-form>
                                     <v-alert v-if="createError" type="error" dense class="mt-2">{{ createError
-                                        }}</v-alert>
+                                    }}</v-alert>
                                 </v-card-text>
                             </v-card>
                         </div>
@@ -159,7 +172,7 @@
                                         <v-btn color="error" @click="closeUpdateSidebar">Cancel</v-btn>
                                     </v-form>
                                     <v-alert v-if="createError" type="error" dense class="mt-2">{{ createError
-                                        }}</v-alert>
+                                    }}</v-alert>
                                 </v-card-text>
                             </v-card>
                         </div>
@@ -172,15 +185,15 @@
                                         <v-list-item-content>
                                             <v-list-item-title>{{ station.name }}</v-list-item-title>
                                             <v-list-item-subtitle>{{ station.city }}, {{ station.state
-                                                }}</v-list-item-subtitle>
+                                            }}</v-list-item-subtitle>
                                             <div class="station-detail"><strong>Status:</strong> {{ station.status }}
                                             </div>
                                             <div class="station-detail"><strong>Power:</strong> {{ station.powerOutput
-                                                }} kW</div>
+                                            }} kW</div>
                                             <div class="station-detail"><strong>Connector:</strong> {{
                                                 station.connectorType }}</div>
                                             <div class="station-detail"><strong>Lat/Lng:</strong> {{ station.latitude
-                                                }}, {{ station.longitude }}</div>
+                                            }}, {{ station.longitude }}</div>
                                         </v-list-item-content>
                                         <template v-if="userRole === 'admin'">
                                             <v-btn icon color="warning" @click.stop="openUpdateSidebar(station)">
@@ -231,8 +244,10 @@ import Point from 'ol/geom/Point'
 import Style from 'ol/style/Style'
 import Icon from 'ol/style/Icon'
 import { fromLonLat } from 'ol/proj'
+import LottieLoader from './LottieLoader.vue'
 
 const stations = ref([])
+const isLoading = ref(false)
 const allStations = ref([])
 const selectedStation = ref(null)
 const userRole = ref('')
@@ -284,6 +299,7 @@ function showStationDetails(station) {
 }
 
 async function fetchAllStations() {
+    isLoading.value = true
     try {
         const response = await fetch('https://charging-stations-crud.vercel.app/api/charging-stations', {
             method: 'GET',
@@ -297,10 +313,13 @@ async function fetchAllStations() {
         updateMarkers()
     } catch (e) {
         createError.value = 'Failed to fetch stations'
+    } finally {
+        isLoading.value = false
     }
 }
 
 async function searchStations() {
+    isLoading.value = true
     stations.value = []
     try {
         const response = await fetch(`https://charging-stations-crud.vercel.app/api/charging-stations?name=${encodeURIComponent(name.value)}&state=${encodeURIComponent(state.value)}&city=${encodeURIComponent(city.value)}&powerOutput=${encodeURIComponent(powerOutput.value)}&connectorType=${encodeURIComponent(connectorType.value)}&status=${encodeURIComponent(status.value)}`, {
@@ -311,8 +330,8 @@ async function searchStations() {
             }
         })
         const data = await response.json()
-        console.log('data', data)
-        if (Array.isArray(data) && data.length === 0) {
+        console.log("data",data)
+        if (!Array.isArray(data) || data.length === 0) {
             createError.value = 'No Result'
         }
         if (response.ok) {
@@ -322,10 +341,11 @@ async function searchStations() {
             showCreateSidebar.value = false;
             showUpdateSidebar.value = false;
             selectedStation.value = null;
-
         }
     } catch (e) {
         createError.value = 'Failed to search stations'
+    } finally {
+        isLoading.value = false
     }
 }
 
@@ -335,7 +355,7 @@ function openCreateSidebar() {
     showUpdateSidebar.value = false
 }
 
-function clearSelection(){
+function clearSelection() {
     name.value = ''
     state.value = ''
     city.value = ''

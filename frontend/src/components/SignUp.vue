@@ -14,22 +14,36 @@
                                 Create Your Account
                             </v-card-title>
 
+                            <!-- Lottie Loader -->
+                            <v-overlay :model-value="loading" contained class="d-flex align-center justify-center">
+                                <LottieLoader />
+                            </v-overlay>
+
+
                             <v-form @submit.prevent="handleSubmit" validate-on="submit lazy">
-                                <v-text-field v-model="username" label="Username" prepend-inner-icon="mdi-account"
+                                <v-text-field :disabled="loading" v-model="username" label="Username" prepend-inner-icon="mdi-account"
                                     variant="outlined" required class="mb-4" />
 
-                                <v-text-field v-model="email" label="Email" type="email" prepend-inner-icon="mdi-email"
+                                <v-text-field :disabled="loading" v-model="email" label="Email" type="email" prepend-inner-icon="mdi-email"
                                     variant="outlined" required class="mb-4" />
 
-                                <v-text-field v-model="password" label="Password" type="password"
+                                <v-text-field :disabled="loading" v-model="password" label="Password" type="password"
                                     prepend-inner-icon="mdi-lock" variant="outlined" required class="mb-4" />
 
-                                <v-select v-model="role" :items="[{title:'User', value:'user'}, {title:'Admin', value:'admin'}]" label="Role"
-                                    prepend-inner-icon="mdi-account-group" variant="outlined" required class="mb-4" />
+                                <v-select :disabled="loading" v-model="role"
+                                    :items="[{ title: 'User', value: 'user' }, { title: 'Admin', value: 'admin' }]"
+                                    label="Role" prepend-inner-icon="mdi-account-group" variant="outlined" required
+                                    class="mb-4" />
 
-                                <v-btn type="submit" color="primary" block size="large" class="mb-3">
-                                    Sign Up
+                                <v-btn type="submit" :color="success ? 'success' : 'primary'" block size="large"
+                                    class="mb-3" :loading="loading && !success" :disabled="loading">
+                                    <template #default>
+                                        <v-icon v-if="success" left>mdi-check-circle</v-icon>
+                                        <span v-if="!success">Sign Up</span>
+                                        <span v-else>Success</span>
+                                    </template>
                                 </v-btn>
+
 
                                 <v-alert v-if="error" type="error" density="compact" class="mb-2">
                                     {{ error }}
@@ -48,27 +62,33 @@
     </v-app>
 </template>
 
-
 <script>
 import AppLogo from './AppLogo.vue';
+import LottieLoader from '@/components/LottieLoader.vue';
 
 export default {
     name: 'SignUp',
     components: {
-        AppLogo
+        AppLogo,
+        LottieLoader
     },
     data() {
         return {
             username: '',
             email: '',
             password: '',
-            role: 'user', // Default role
-            error: ''
+            role: 'user',
+            error: '',
+            loading: false,
+            success: false
         };
     },
     methods: {
         async handleSubmit() {
             this.error = '';
+            this.loading = true;
+            this.success = false;
+
             try {
                 const response = await fetch('https://charging-stations-crud.vercel.app/api/register', {
                     method: 'POST',
@@ -83,22 +103,31 @@ export default {
                     })
                 });
                 const data = await response.json();
+
                 if (response.ok && data.token) {
                     localStorage.setItem('user', JSON.stringify(data.user));
                     localStorage.setItem('token', data.token);
                     document.cookie = `token=${data.token}; path=/;`;
                     document.cookie = `user=${encodeURIComponent(JSON.stringify(data.user))}; path=/;`;
-                    this.$router.push('/');
+
+                    this.success = true;
+
+                    setTimeout(() => {
+                        this.$router.push('/');
+                    }, 1000);
                 } else {
                     this.error = data.message || 'Signup failed';
                 }
             } catch (err) {
                 this.error = 'Network error';
+            } finally {
+                this.loading = false;
             }
         }
     }
 };
 </script>
+
 
 
 <style scoped>

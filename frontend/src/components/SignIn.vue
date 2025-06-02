@@ -15,6 +15,12 @@
                 Welcome Back
               </v-card-title>
 
+              <!-- Lottie Loader -->
+              <v-overlay :model-value="loading" contained class="d-flex align-center justify-center">
+                <LottieLoader />
+              </v-overlay>
+
+
               <v-form @submit.prevent="handleSubmit" validate-on="submit lazy">
                 <v-text-field v-model="email" label="Email" type="email" variant="outlined"
                   prepend-inner-icon="mdi-email" required class="mb-4" />
@@ -22,9 +28,16 @@
                 <v-text-field v-model="password" label="Password" type="password" variant="outlined"
                   prepend-inner-icon="mdi-lock" required class="mb-4" />
 
-                <v-btn type="submit" color="primary" block size="large" class="mb-3">
-                  Sign In
+                <v-btn type="submit" :color="success ? 'success' : 'primary'" block size="large" class="mb-3"
+                  :loading="loading && !success" :disabled="loading">
+                  <template #default>
+                    <v-icon v-if="success" left>mdi-check-circle</v-icon>
+                    <span v-if="!success">Sign In</span>
+                    <span v-else>Success</span>
+                  </template>
                 </v-btn>
+
+
 
                 <v-alert v-if="error" type="error" density="compact" class="mb-2">
                   {{ error }}
@@ -44,54 +57,62 @@
 </template>
 
 <script>
-import AppLogo from './AppLogo.vue';
+import AppLogo from './AppLogo.vue'
+import LottieLoader from '@/components/LottieLoader.vue'
 
 export default {
   name: 'SignIn',
   components: {
-    AppLogo
+    AppLogo,
+    LottieLoader
   },
   data() {
     return {
       email: '',
       password: '',
-      error: ''
+      error: '',
+      loading: false,
+      success: false
     };
   },
   methods: {
     async handleSubmit() {
-      this.error = '';
+      this.error = ''
+      this.loading = true
+      this.success = false
+
       try {
         const response = await fetch('https://charging-stations-crud.vercel.app/api/login', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            email: this.email,
-            password: this.password
-          })
-        });
-        const data = await response.json();
-        console.log("response", response)
-        console.log("data", data)
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: this.email, password: this.password })
+        })
+        const data = await response.json()
+
         if (response.ok && data.token) {
-          // Save token and user in cookies
-          localStorage.setItem('token', data.token);
-          localStorage.setItem('user', JSON.stringify(data.user));
-          // Set cookies for token and user
-          document.cookie = `token=${data.token}; path=/;`;
-          document.cookie = `user=${encodeURIComponent(JSON.stringify(data.user))}; path=/;`;
-          this.$router.push('/');
+          // Save and redirect
+          localStorage.setItem('token', data.token)
+          localStorage.setItem('user', JSON.stringify(data.user))
+          document.cookie = `token=${data.token}; path=/;`
+          document.cookie = `user=${encodeURIComponent(JSON.stringify(data.user))}; path=/;`
+
+          // ✅ Trigger success animation
+          this.success = true
+          setTimeout(() => {
+            this.$router.push('/')
+          }, 1000)
         } else {
-          this.error = data.message || 'Login failed';
+          this.error = data.message || 'Login failed'
         }
       } catch (err) {
-        this.error = 'Network error';
+        this.error = 'Network error'
+      } finally {
+        this.loading = false
       }
     }
   }
-};
+}
+
 </script>
 
 <style scoped>
