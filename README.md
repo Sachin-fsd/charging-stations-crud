@@ -7,7 +7,7 @@ This project includes both a **Node.js/Express backend** and a **Vue 3 + Vuetify
 
 <div align="center">
 
-<img src="https://github.com/Sachin-fsd/all-images/blob/main/map.png?raw=true" alt="EV Charging Station" width="96" />
+<img src="https://github.com/Sachin-fsd/all-images/blob/main/map.png?raw=true" alt="EV Charging Station"/>
 
 </div>
 
@@ -167,5 +167,5 @@ This project includes both a **Node.js/Express backend** and a **Vue 3 + Vuetify
 Sachin
 
 <p align="center">
-  <img src="[/public/logo.png](https://github.com/Sachin-fsd/all-images/blob/main/icon.png?raw=true)" alt="Charging Battery" width="96" />
+  <img src="https://github.com/Sachin-fsd/all-images/blob/main/icon.png?raw=true" alt="Charging Battery" width="96" />
 </p>
