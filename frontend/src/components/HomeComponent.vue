@@ -41,6 +41,7 @@
                                     { title: 'Maintenance', value: 'Maintenance' },
                                 ]" label="Status" dense variant="outlined" class="mb-2" />
                                 <v-btn color="primary" block @click="searchStations" class="mb-2">Search</v-btn>
+                                <v-btn color="secondary" block @click="clearSelection" class="mb-2">Reset</v-btn>
                                 <v-alert v-if="createError" type="error" dense>{{ createError }}</v-alert>
                             </v-card-text>
                         </v-card>
@@ -332,6 +333,20 @@ function openCreateSidebar() {
     rightSidebarVisible.value = true
     showCreateSidebar.value = true
     showUpdateSidebar.value = false
+}
+
+function clearSelection(){
+    name.value = ''
+    state.value = ''
+    city.value = ''
+    powerOutput.value = ''
+    connectorType.value = ''
+    status.value = ''
+    createError.value = ''
+    selectedStation.value = null
+    showCreateSidebar.value = false
+    showUpdateSidebar.value = false
+    fetchAllStations()
 }
 
 function closeCreateSidebar() {
