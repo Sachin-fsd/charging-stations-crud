@@ -5,7 +5,7 @@ import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 // App and Router
-import './output.css';
+import 'output.css';
 import App from './App.vue';
 import router from './router';
 
