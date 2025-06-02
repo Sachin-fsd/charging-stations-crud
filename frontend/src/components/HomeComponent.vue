@@ -310,7 +310,8 @@ async function searchStations() {
             updateMarkers();
             showCreateSidebar.value = false;
             showUpdateSidebar.value = false;
-            
+            selectedStation = null;
+
         }
     } catch (e) {
         createError.value = 'Failed to search stations'
@@ -563,26 +564,7 @@ onMounted(() => {
 }
 
 
-@media (max-width: 900px) {
-    .main-content {
-        flex-direction: column;
-    }
 
-    .left-sidebar {
-        position: relative;
-        height: auto;
-        max-height: none;
-        width: 100%;
-        max-width: 100%;
-        z-index: 10;
-        border-right: none;
-        border-bottom: 1px solid #e0e0e0;
-    }
-
-    /* .sidebar-open-btn {
-    display: none; 
-  } */
-}
 
 
 .content-area {
@@ -680,5 +662,32 @@ onMounted(() => {
 
 .station-list-item.selected-station {
     background: #e3f2fd !important;
+}
+
+@media (max-width: 900px) {
+    .main-content {
+        flex-direction: column;
+    }
+
+    .left-sidebar {
+        position: relative;
+        height: auto;
+        max-height: none;
+        width: 100%;
+        max-width: 100%;
+        z-index: 10;
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .right-sidebar {
+        bottom: 10px;
+        width: 340px;
+        height: 86vh;
+    }
+
+    /* .sidebar-open-btn {
+    display: none; 
+  } */
 }
 </style>
