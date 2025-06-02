@@ -1,121 +1,170 @@
-# EV Charging Stations Backend
+# EV Charging Stations App
 
-This is a Node.js backend API for managing EV charging stations and user authentication. It uses Express, MongoDB (via Mongoose), JWT for authentication, and supports user roles (admin, user).
+A full-stack web application for managing and discovering EV charging stations.  
+This project includes both a **Node.js/Express backend** and a **Vue 3 + Vuetify frontend**.
+
+---
+
+<div align="center">
+
+<img src="/public/screenshots/map.png" alt="EV Charging Station" width="96" />
+
+</div>
+
+---
 
 ## Features
 
 - User registration and login with JWT authentication
 - Role-based access control (admin, user)
-- CRUD operations for charging stations
+- CRUD operations for charging stations (admin only)
+- Search and filter stations
+- Interactive map with attractive station markers
+- Responsive, modern UI with Vuetify and OpenLayers
 - Input validation and error handling
+
+---
+<!-- 
+<div align="center">
+
+<img src="frontend/public/screenshots/login.png" alt="Login Page" width="350" style="margin: 10px;">
+<img src="frontend/public/screenshots/map.png" alt="Map View" width="350" style="margin: 10px;">
+<img src="frontend/public/screenshots/admin.png" alt="Admin Panel" width="350" style="margin: 10px;">
+
+</div>
+  <img src="frontend/public/screenshots/admin.png" alt="Admin Panel" width="350" style="margin: 10px;">
+</p> -->
+
+**(Add your own screenshots in `frontend/public/screenshots/` for best results)**
+
+---
 
 ## Project Structure
 
-```
+```fs
 .
-├── .env
-├── index.js
-├── package.json
-├── config/
-│   └── db.js
-├── middleware/
-│   ├── auth.middleware.js
-│   └── validateCharging.middleware.js
-├── models/
-│   ├── chargingStation.model.js
-│   └── user.model.js
-├── routes/
-│   ├── add.route.js
-│   ├── delete.route.js
-│   ├── login.route.js
-│   ├── read.route.js
-│   ├── register.route.js
-│   └── update.route.js
+├── backend/
+│   ├── .env
+│   ├── index.js
+│   ├── package.json
+│   ├── config/
+│   ├── middleware/
+│   ├── models/
+│   └── routes/
+├── frontend/
+│   ├── package.json
+│   ├── src/
+│   ├── public/
+│   └── ...
+└── README.md
 ```
 
-## Prerequisites
+---
 
-- Node.js (v14 or higher recommended)
-- npm
-- MongoDB database (local or Atlas)
+## Backend
 
-## Setup Instructions
+### Tech Stack
 
-1. **Clone the repository**
+- Node.js, Express
+- MongoDB (Mongoose)
+- JWT authentication
+- Role-based access
+
+### Setup
+
+1. **Navigate to backend folder:**
 
    ```sh
-   git clone <repository-url>
    cd backend
    ```
 
-2. **Install dependencies**
+2. **Install dependencies:**
 
    ```sh
    npm install
    ```
 
-3. **Configure environment variables**
+3. **Configure environment variables:**
+   Create a `.env` file in the backend root:
 
-   Create a `.env` file in the root directory:
-
-   ```.env
+   ```env
    JWT_SECRET=your_jwt_secret
    DB_URI=your_mongodb_connection_string
    ```
 
-4. **Start the server**
-
-   Uncomment the server start code in [`index.js`](index.js):
-
-   ```js
-   // filepath: index.js
-   // ...existing code...
-   connectDB(); // Function to connect to MongoDB
-   app.listen(3000, () => {
-       console.log('Server is running on http://localhost:3000');
-   });
-   // ...existing code...
-   ```
-
-   Then run:
+4. **Start the server:**
 
    ```sh
    node index.js
    ```
 
-## API Endpoints
+   The backend runs on [http://localhost:3000](http://localhost:3000) by default.
 
-### Authentication
+### API Endpoints
 
 - `POST /api/register` — Register a new user
 - `POST /api/login` — Login and receive JWT token
-
-### Charging Stations
-
 - `GET /api/charging-stations` — List all charging stations
 - `GET /api/charging-stations/:id` — Get a charging station by ID
 - `POST /api/charging-stations` — Add a new charging station (admin only)
 - `PUT /api/charging-stations/:id` — Update a charging station (admin only)
 - `DELETE /api/charging-stations/:id` — Delete a charging station (admin only)
 
-## Middleware
+---
 
-- [`authenticate`](middleware/auth.middleware.js): Verifies JWT token
-- [`authorize`](middleware/auth.middleware.js): Checks user role
-- [`validateChargingStation`](middleware/validateCharging.middleware.js): Validates charging station input (not currently used in routes)
+## Frontend
 
-## Models
+### Tech Stack Frontend
 
-- [`User`](models/user.model.js): User schema with roles
-- [`ChargingStation`](models/chargingStation.model.js): Charging station schema
+- Vue 3
+- Vuetify (Material Design UI)
+- OpenLayers (interactive map)
+- Tailwind CSS (optional, for utility classes)
 
-## Notes
+### Setup Frontned
 
-- Admin role is required for adding, updating, or deleting charging stations.
-- All routes except `/api/login` and `/api/register` require authentication.
-- Error handling and 404 middleware are included.
+1. **Navigate to frontend folder:**
+
+   ```sh
+   cd frontend
+   ```
+
+2. **Install dependencies:**
+
+   ```sh
+   npm install
+   ```
+
+3. **Run the development server:**
+
+   ```sh
+   npm run dev
+   ```
+
+   The frontend runs on [http://localhost:5173](http://localhost:5173) by default (Vite).
+
+### Features Frontend
+
+- Register and login as user or admin
+- Admins can add, update, and delete charging stations
+- All users can search, filter, and view stations on a map
+- Click on map markers to view station details in a sidebar
+- Responsive and modern UI
 
 ---
 
-**Author:**  
-See [package.json](package.json)
+## Notes
+
+- The backend must be running for the frontend to function properly.
+- Update API URLs in the frontend if your backend runs on a different host/port.
+- Admin role is required for adding, updating, or deleting charging stations.
+- All routes except `/api/login` and `/api/register` require authentication.
+
+---
+
+## Author
+Sachin
+
+<p align="center">
+  <img src="/public/logo.png" alt="Charging Battery" width="96" />
+</p>
