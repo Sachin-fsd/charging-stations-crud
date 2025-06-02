@@ -76,11 +76,11 @@
                                     <div class="station-detail"><strong>Status:</strong> {{ selectedStation.status }}
                                     </div>
                                     <div class="station-detail"><strong>Power:</strong> {{ selectedStation.powerOutput
-                                        }} kW</div>
+                                    }} kW</div>
                                     <div class="station-detail"><strong>Connector:</strong> {{
                                         selectedStation.connectorType }}</div>
                                     <div class="station-detail"><strong>Lat/Lng:</strong> {{ selectedStation.latitude
-                                        }}, {{ selectedStation.longitude }}</div>
+                                    }}, {{ selectedStation.longitude }}</div>
                                     <v-row dense align="center" class="mb-2" v-if="userRole === 'admin'">
                                         <v-col cols="auto">
                                             <v-btn icon color="warning"
@@ -128,7 +128,7 @@
                                         <v-btn color="error" @click="closeCreateSidebar">Cancel</v-btn>
                                     </v-form>
                                     <v-alert v-if="createError" type="error" dense class="mt-2">{{ createError
-                                        }}</v-alert>
+                                    }}</v-alert>
                                 </v-card-text>
                             </v-card>
                         </div>
@@ -158,7 +158,7 @@
                                         <v-btn color="error" @click="closeUpdateSidebar">Cancel</v-btn>
                                     </v-form>
                                     <v-alert v-if="createError" type="error" dense class="mt-2">{{ createError
-                                        }}</v-alert>
+                                    }}</v-alert>
                                 </v-card-text>
                             </v-card>
                         </div>
@@ -171,15 +171,15 @@
                                         <v-list-item-content>
                                             <v-list-item-title>{{ station.name }}</v-list-item-title>
                                             <v-list-item-subtitle>{{ station.city }}, {{ station.state
-                                                }}</v-list-item-subtitle>
+                                            }}</v-list-item-subtitle>
                                             <div class="station-detail"><strong>Status:</strong> {{ station.status }}
                                             </div>
                                             <div class="station-detail"><strong>Power:</strong> {{ station.powerOutput
-                                                }} kW</div>
+                                            }} kW</div>
                                             <div class="station-detail"><strong>Connector:</strong> {{
                                                 station.connectorType }}</div>
                                             <div class="station-detail"><strong>Lat/Lng:</strong> {{ station.latitude
-                                                }}, {{ station.longitude }}</div>
+                                            }}, {{ station.longitude }}</div>
                                         </v-list-item-content>
                                         <template v-if="userRole === 'admin'">
                                             <v-btn icon color="warning" @click.stop="openUpdateSidebar(station)">
@@ -272,6 +272,14 @@ let map, vectorSource, vectorLayer
 
 function showStationDetails(station) {
     selectedStation.value = station
+    if (map && station.latitude && station.longitude) {
+        const coords = fromLonLat([Number(station.longitude), Number(station.latitude)])
+        map.getView().animate({
+            center: coords,
+            zoom: 15, // or your preferred zoom level
+            duration: 600
+        })
+    }
 }
 
 async function fetchAllStations() {
@@ -302,7 +310,7 @@ async function searchStations() {
             }
         })
         const data = await response.json()
-        console.log('data',data)
+        console.log('data', data)
         if (Array.isArray(data) && data.length === 0) {
             createError.value = 'No Result'
         }
@@ -471,7 +479,15 @@ function updateMarkers() {
             })
             if (feature && feature.get('stationData')) {
                 selectedStation.value = feature.get('stationData')
-                rightSidebarVisible.value = true
+                rightSidebarVisible.value = true;
+                if (selectedStation.value.latitude && selectedStation.value.longitude) {
+                    const coords = fromLonLat([Number(selectedStation.value.longitude), Number(selectedStation.value.latitude)])
+                    map.getView().animate({
+                        center: coords,
+                        zoom: 15, // or your preferred zoom level
+                        duration: 600
+                    })
+                }
             }
         })
     }
