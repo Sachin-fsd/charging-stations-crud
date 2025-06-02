@@ -8,18 +8,18 @@ const JWT_SECRET = process.env.JWT_SECRET || 'jwt_secret';
 const authenticate = async (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
-        return res.status(401).json({ message: 'No token provided' });
+        return res.status(401).json({ message: 'No token provided', ok:false });
     }
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
          // Check if decoded token has id
         if (!decoded || !decoded.id) {
-            return res.status(401).json({ message: 'Invalid token.' });
+            return res.status(401).json({ message: 'Invalid token.', ok:false });
         }
         req.user = await User.findById(decoded.id);
         next();
     } catch (error) {
-        res.status(401).json({ message: 'Invalid token!' });
+        res.status(401).json({ message: 'Invalid token!', ok:false });
     }
 };
 const authorize = (role) => {
