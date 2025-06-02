@@ -38,6 +38,7 @@
                                     { title: '— Select —', value: '' },
                                     { title: 'Active', value: 'Active' },
                                     { title: 'Inactive', value: 'Inactive' },
+                                    { title: 'Maintenance', value: 'Maintenance' },
                                 ]" label="Status" dense variant="outlined" class="mb-2" />
                                 <v-btn color="primary" block @click="searchStations" class="mb-2">Search</v-btn>
                                 <v-alert v-if="createError" type="error" dense>{{ createError }}</v-alert>
@@ -301,6 +302,7 @@ async function searchStations() {
             }
         })
         const data = await response.json()
+        console.log('data',data)
         if (Array.isArray(data) && data.length === 0) {
             createError.value = 'No Result'
         }
@@ -310,7 +312,7 @@ async function searchStations() {
             updateMarkers();
             showCreateSidebar.value = false;
             showUpdateSidebar.value = false;
-            selectedStation = null;
+            selectedStation.value = null;
 
         }
     } catch (e) {

@@ -36,7 +36,7 @@ router.get('/charging-stations', async (req, res) => {
             filter.connectorType = { $regex: connectorType, $options: 'i' };
         }
         if (status) {
-            filter.status = { $regex: status, $options: 'i' };
+            filter.status = status;
         }
 
         const stations = await ChargingStation.find(filter);
