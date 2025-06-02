@@ -7,7 +7,7 @@ This project includes both a **Node.js/Express backend** and a **Vue 3 + Vuetify
 
 <div align="center">
 
-<img src="/public/screenshots/map.png" alt="EV Charging Station" width="96" />
+<img src="https://github.com/Sachin-fsd/all-images/blob/main/map.png?raw=true" alt="EV Charging Station" width="96" />
 
 </div>
 
@@ -35,7 +35,7 @@ This project includes both a **Node.js/Express backend** and a **Vue 3 + Vuetify
   <img src="frontend/public/screenshots/admin.png" alt="Admin Panel" width="350" style="margin: 10px;">
 </p> -->
 
-**(Add your own screenshots in `frontend/public/screenshots/` for best results)**
+<!-- **(Add your own screenshots in `frontend/public/screenshots/` for best results)** -->
 
 ---
 
@@ -141,7 +141,7 @@ This project includes both a **Node.js/Express backend** and a **Vue 3 + Vuetify
    npm run dev
    ```
 
-   The frontend runs on [http://localhost:5173](http://localhost:5173) by default (Vite).
+   The frontend runs on [http://localhost:8080](http://localhost:8080) by default .
 
 ### Features Frontend
 
@@ -163,8 +163,9 @@ This project includes both a **Node.js/Express backend** and a **Vue 3 + Vuetify
 ---
 
 ## Author
+
 Sachin
 
 <p align="center">
-  <img src="/public/logo.png" alt="Charging Battery" width="96" />
+  <img src="[/public/logo.png](https://github.com/Sachin-fsd/all-images/blob/main/icon.png?raw=true)" alt="Charging Battery" width="96" />
 </p>
