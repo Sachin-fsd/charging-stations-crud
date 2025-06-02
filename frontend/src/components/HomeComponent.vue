@@ -76,11 +76,11 @@
                                     <div class="station-detail"><strong>Status:</strong> {{ selectedStation.status }}
                                     </div>
                                     <div class="station-detail"><strong>Power:</strong> {{ selectedStation.powerOutput
-                                    }} kW</div>
+                                        }} kW</div>
                                     <div class="station-detail"><strong>Connector:</strong> {{
                                         selectedStation.connectorType }}</div>
                                     <div class="station-detail"><strong>Lat/Lng:</strong> {{ selectedStation.latitude
-                                    }}, {{ selectedStation.longitude }}</div>
+                                        }}, {{ selectedStation.longitude }}</div>
                                     <v-row dense align="center" class="mb-2" v-if="userRole === 'admin'">
                                         <v-col cols="auto">
                                             <v-btn icon color="warning"
@@ -95,7 +95,7 @@
                                         </v-col>
                                     </v-row>
 
-                                    <v-btn color="secondary" class="mt-2" @click="selectedStation = null">
+                                    <v-btn color="secondary" class="mt-2" @click="backToList">
                                         Back to List
                                     </v-btn>
 
@@ -128,7 +128,7 @@
                                         <v-btn color="error" @click="closeCreateSidebar">Cancel</v-btn>
                                     </v-form>
                                     <v-alert v-if="createError" type="error" dense class="mt-2">{{ createError
-                                    }}</v-alert>
+                                        }}</v-alert>
                                 </v-card-text>
                             </v-card>
                         </div>
@@ -158,7 +158,7 @@
                                         <v-btn color="error" @click="closeUpdateSidebar">Cancel</v-btn>
                                     </v-form>
                                     <v-alert v-if="createError" type="error" dense class="mt-2">{{ createError
-                                    }}</v-alert>
+                                        }}</v-alert>
                                 </v-card-text>
                             </v-card>
                         </div>
@@ -171,15 +171,15 @@
                                         <v-list-item-content>
                                             <v-list-item-title>{{ station.name }}</v-list-item-title>
                                             <v-list-item-subtitle>{{ station.city }}, {{ station.state
-                                            }}</v-list-item-subtitle>
+                                                }}</v-list-item-subtitle>
                                             <div class="station-detail"><strong>Status:</strong> {{ station.status }}
                                             </div>
                                             <div class="station-detail"><strong>Power:</strong> {{ station.powerOutput
-                                            }} kW</div>
+                                                }} kW</div>
                                             <div class="station-detail"><strong>Connector:</strong> {{
                                                 station.connectorType }}</div>
                                             <div class="station-detail"><strong>Lat/Lng:</strong> {{ station.latitude
-                                            }}, {{ station.longitude }}</div>
+                                                }}, {{ station.longitude }}</div>
                                         </v-list-item-content>
                                         <template v-if="userRole === 'admin'">
                                             <v-btn icon color="warning" @click.stop="openUpdateSidebar(station)">
@@ -349,6 +349,19 @@ function closeCreateSidebar() {
     }
 }
 
+function backToList() {
+    selectedStation.value = null
+    showCreateSidebar.value = false
+    showUpdateSidebar.value = false
+    fetchAllStations();
+    const coords = fromLonLat([77.1025, 28.7041])
+    map.getView().animate({
+        center: coords,
+        zoom: 6, // or your preferred zoom level
+        duration: 600
+    })
+}
+
 function openUpdateSidebar(station) {
     showUpdateSidebar.value = true
     showCreateSidebar.value = false
@@ -516,7 +529,7 @@ onMounted(() => {
         ],
         view: new View({
             center: fromLonLat([77.1025, 28.7041]),
-            zoom: 5
+            zoom: 6
         })
     })
 
@@ -680,6 +693,16 @@ onMounted(() => {
 
 .station-list-item.selected-station {
     background: #e3f2fd !important;
+}
+
+.station-card {
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
 }
 
 @media (max-width: 900px) {
