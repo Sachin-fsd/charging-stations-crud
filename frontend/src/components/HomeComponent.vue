@@ -330,7 +330,6 @@ async function searchStations() {
             }
         })
         const data = await response.json()
-        console.log("data",data)
         if (!Array.isArray(data) || data.length === 0) {
             createError.value = 'No Result'
         }
@@ -398,6 +397,7 @@ function backToList() {
 }
 
 function openUpdateSidebar(station) {
+    selectedStation.value = null;
     showUpdateSidebar.value = true
     showCreateSidebar.value = false
     editStation.value = { ...station }

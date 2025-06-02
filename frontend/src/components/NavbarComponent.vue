@@ -40,14 +40,10 @@ export default {
             if (!this.user || !this.user.username) {
                 throw new Error('User data is not valid');
             }
-            console.log('User data from ls:', this.user);
         } catch (e) {
             this.user = null;
             alert("unable to find user data")
         }
-        // }
-        // console.log('User data:', this.user);
-        // Check if user is logged in
     },
     methods: {
         toggleDropdown() {
